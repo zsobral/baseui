@@ -15,7 +15,7 @@
   "module": "/esm/index.js",
   "repository": "uber-web/baseui",
   "scripts": {
-    "foo": "echo \"foo\"",
+    "foo": "echo 'foo' > foo.txt",
     "lint:code": "eslint ./",
     "lint:markdown": "markdownlint -c ./.markdownlint.json proposals",
     "lint": "yarn lint:code && yarn lint:markdown",
