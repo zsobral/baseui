@@ -21,6 +21,19 @@ expect.extend({toMatchImageSnapshot});
  */
 function vrt(componentName, interactionsByScenario = {}) {
   describe(componentName, () => {
+    afterEach(async function() {
+      if (this.currentTest && this.currentTest.state === 'failed') {
+        const fileName =
+          this.currentTest.fullTitle().replace(/\W/g, '_') + '.png';
+        await page.screenshot({path: fileName});
+        if (process.env.CI) {
+          console.log(
+            `\u001B]1338;url="artifact://${fileName}";alt="Screenshot"\u0007`,
+          );
+        }
+      }
+    });
+
     getScenariosForComponent(componentName).forEach(scenarioName => {
       it(scenarioName, async () => {
         const root = await prepare(page, scenarioName);
