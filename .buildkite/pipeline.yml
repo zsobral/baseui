@@ -42,7 +42,7 @@ steps:
     agents:
       queue: builders
     artifact_paths:
-      - 'src/button/__tests__/__image_snapshots__/__diff_output__/*'
+      - '/baseui/src/button/__tests__/__image_snapshots__/__diff_output__/*'
   # - name: ':validate-examples:'
   #   command: yarn validate:examples
   #   plugins:
