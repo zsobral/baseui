@@ -13,6 +13,6 @@ COPY . .
 
 # Perform any build steps if you want binaries inside of the image
 RUN yarn build
-# RUN yarn build-storybook
-# RUN yarn e2e:build
+RUN yarn build-storybook
+RUN yarn e2e:build
 # RUN NODE_ENV=production yarn documentation:build

@@ -1,12 +1,12 @@
 steps:
   # Build the image in a single place for all parallel steps to leverage the same image.
-  - name: ':docker: :package: unit'
-    plugins:
-      'docker-compose#v3.0.3':
-        build: baseui
-        image-repository: 027047743804.dkr.ecr.us-east-2.amazonaws.com/uber
-    agents:
-      queue: builders
+  # - name: ':docker: :package: unit'
+  #   plugins:
+  #     'docker-compose#v3.0.3':
+  #       build: baseui
+  #       image-repository: 027047743804.dkr.ecr.us-east-2.amazonaws.com/uber
+  #   agents:
+  #     queue: builders
   # - name: ':docker: :package: docs'
   #   plugins:
   #     'docker-compose#v3.0.3':
@@ -17,41 +17,32 @@ steps:
   #       image-repository: 027047743804.dkr.ecr.us-east-2.amazonaws.com/uber
   #   agents:
   #     queue: builders
-  # - name: ':docker: :package: e2e'
-  #   plugins:
-  #     'docker-compose#v3.0.3':
-  #       build:
-  #         - e2e-test
-  #         - e2e-server
-  #         - e2e-server-healthy
-  #       image-repository: 027047743804.dkr.ecr.us-east-2.amazonaws.com/uber
-  #   agents:
-  #     queue: builders
+  - name: ':docker: :package: e2e'
+    plugins:
+      'docker-compose#v3.0.3':
+        build:
+          - e2e-test
+          - e2e-server
+          - e2e-server-healthy
+        image-repository: 027047743804.dkr.ecr.us-east-2.amazonaws.com/uber
+    agents:
+      queue: builders
   # Wait until all images are built.
   # This way we can download the built image from a registry instead of building each for each test task.
   # - wait
   # All of the commands after the wait are run in parallel.
-  - name: ':foo:'
-    command: yarn foo
-    artifact_paths:
-      - '*.txt'
+  - name: ':vrt:'
+    command: yarn add puppeteer && yarn vrt
     plugins:
       'docker-compose#v3.0.3':
-        run: baseui
+        run: e2e-test
+        pull:
+          - e2e-server
+          - e2e-server-healthy
     agents:
-      queue: workers
-  # - name: ':vrt:'
-  #   command: yarn add puppeteer && yarn vrt
-  #   plugins:
-  #     'docker-compose#v3.0.3':
-  #       run: e2e-test
-  #       pull:
-  #         - e2e-server
-  #         - e2e-server-healthy
-  #   agents:
-  #     queue: builders
-  #   artifact_paths:
-  #     - '/baseui/src/button/__tests__/__image_snapshots__/__diff_output__/*'
+      queue: builders
+    artifact_paths:
+      - '/baseui/src/button/__tests__/__image_snapshots__/__diff_output__/*'
   # - name: ':validate-examples:'
   #   command: yarn validate:examples
   #   plugins:
