@@ -34,7 +34,7 @@ steps:
   - name: ':foo:'
     command: yarn foo
     artifact_paths:
-      - '/foo/**/*'
+      - 'foo.txt'
     plugins:
       'docker-compose#v3.0.3':
         run: baseui
